@@ -41,6 +41,16 @@ body {
     background: radial-gradient(circle at center, #11001c 0%, #05000a 100%);
 }
 
+#particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
 .glow {
     position: absolute;
     border-radius: 50%;
@@ -82,6 +92,8 @@ body {
     height: 80vh;
     padding: 2rem;
     gap: 4rem;
+    position: relative;
+    z-index: 1;
 }
 
 /* Left Section: Time & Search */

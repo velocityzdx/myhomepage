@@ -38,10 +38,11 @@ const currentAccountLabel = document.getElementById('current-account-label');
 function updateClock() {
     const now = new Date();
     
-    // Time
+    // Time with seconds
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
-    clockEl.textContent = `${hours}:${minutes}`;
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    clockEl.textContent = `${hours}:${minutes}:${seconds}`;
     
     // Date
     const options = { weekday: 'long', month: 'long', day: 'numeric' };
@@ -212,3 +213,92 @@ document.addEventListener('click', (e) => {
 });
 
 connectLanyard();
+
+// ==========================================
+// PARTICLE SYSTEM
+// ==========================================
+(function () {
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+    const particles = [];
+    const PARTICLE_COUNT = 120;
+    const MOUSE_RADIUS = 130;
+    const PUSH_FORCE = 8;
+    const FRICTION = 0.92;
+    const RETURN_SPEED = 0.015;
+
+    const mouse = { x: -9999, y: -9999 };
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    document.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+    document.addEventListener('mouseleave', () => {
+        mouse.x = -9999;
+        mouse.y = -9999;
+    });
+
+    // Create particles
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        particles.push({
+            x, y,
+            originX: x,
+            originY: y,
+            vx: 0,
+            vy: 0,
+            radius: Math.random() * 1.8 + 0.5,
+            opacity: Math.random() * 0.5 + 0.15
+        });
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (const p of particles) {
+            // Mouse interaction
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < MOUSE_RADIUS) {
+                const angle = Math.atan2(dy, dx);
+                const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS * PUSH_FORCE;
+                p.vx += Math.cos(angle) * force;
+                p.vy += Math.sin(angle) * force;
+            }
+
+            // Return to origin
+            p.vx += (p.originX - p.x) * RETURN_SPEED;
+            p.vy += (p.originY - p.y) * RETURN_SPEED;
+
+            // Friction
+            p.vx *= FRICTION;
+            p.vy *= FRICTION;
+
+            // Move
+            p.x += p.vx;
+            p.y += p.vy;
+
+            // Draw
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+            ctx.fill();
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+})();
