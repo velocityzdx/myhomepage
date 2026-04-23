@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <main class="container">
+        <!-- Left Section: Time and Search -->
+        <div class="left-section">
+            <div class="clock" id="clock">00:00</div>
+            <div class="date" id="date">Loading date...</div>
+            
+            <div class="search-container">
+                <form action="https://duckduckgo.com/" method="get" class="search-form">
+                    <input type="text" name="q" placeholder="Search the web..." autocomplete="off">
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Section: Discord Card -->
+        <div class="right-section">
+            <div class="discord-card glass" id="discord-card">
+                <div class="card-header">
+                    <div class="avatar-container">
+                        <img id="discord-avatar" src="https://ui-avatars.com/api/?name=User&background=333&color=fff" alt="Discord Avatar">
+                        <div id="discord-status" class="status-indicator offline"></div>
+                    </div>
+                    <div class="user-info">
+                        <h2 id="discord-username">Loading...</h2>
+                        <span id="discord-custom-status">Connecting to Lanyard...</span>
+                    </div>
+                </div>
+                
+                <div id="activity-container" class="activity-container hidden">
+                    <h3 class="activity-title" id="activity-title">Playing a game</h3>
+                    <div class="activity-content">
+                        <img id="activity-image" class="activity-image hidden" src="" alt="Activity">
+                        <div class="activity-details">
+                            <span id="activity-name" class="activity-name"></span>
+                            <span id="activity-state" class="activity-state"></span>
+                            <span id="activity-details-text" class="activity-details-text"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
