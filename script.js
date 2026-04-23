@@ -1,7 +1,12 @@
 // ==========================================
 // CONFIGURATION
 // ==========================================
-let currentDiscordId = "1484348207143194808"; 
+let currentDiscordId = "1484348207143194808";
+
+const defaultStatuses = {
+    "1484348207143194808": "they call me everyone cause im everyone :)",
+    "1428576132793499650": "bees eat for free✌️"
+};
 
 // ==========================================
 // DOM ELEMENTS
@@ -119,7 +124,7 @@ function updateDiscordUI(data) {
     statusEl.className = `status-indicator ${data.discord_status}`;
 
     // 3. Custom Status
-    let customStatusText = "Chilling...";
+    let customStatusText = defaultStatuses[currentDiscordId] || "Chilling...";
     const customActivity = data.activities.find(a => a.type === 4); // Type 4 is custom status
     if (customActivity && customActivity.state) {
         customStatusText = customActivity.state;
