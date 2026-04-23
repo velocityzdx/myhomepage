@@ -29,6 +29,17 @@
         <!-- Right Section: Discord Card -->
         <div class="right-section">
             <div class="discord-card glass" id="discord-card">
+                <div class="account-switcher">
+                    <button class="switcher-btn glass" id="switcher-btn">
+                        <span id="current-account-label">Main Account</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                    <div class="switcher-menu glass hidden" id="switcher-menu">
+                        <div class="switcher-option active" data-id="1484348207143194808">Main Account</div>
+                        <div class="switcher-option" data-id="1428576132793499650">Alt Account</div>
+                    </div>
+                </div>
+
                 <div class="card-header">
                     <div class="avatar-container">
                         <img id="discord-avatar" src="https://ui-avatars.com/api/?name=User&background=333&color=fff" alt="Discord Avatar">

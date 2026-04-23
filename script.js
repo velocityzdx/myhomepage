@@ -1,11 +1,7 @@
 // ==========================================
 // CONFIGURATION
 // ==========================================
-// Replace this with your actual Discord User ID!
-// To get your ID:
-// 1. Open Discord Settings -> Advanced -> Enable "Developer Mode"
-// 2. Right click your profile -> "Copy User ID"
-const DISCORD_ID = "YOUR_DISCORD_ID_HERE"; 
+let currentDiscordId = "1484348207143194808"; 
 
 // ==========================================
 // DOM ELEMENTS
@@ -24,6 +20,12 @@ const activityImg = document.getElementById('activity-image');
 const activityName = document.getElementById('activity-name');
 const activityState = document.getElementById('activity-state');
 const activityDetails = document.getElementById('activity-details-text');
+
+// Switcher Elements
+const switcherBtn = document.getElementById('switcher-btn');
+const switcherMenu = document.getElementById('switcher-menu');
+const switcherOptions = document.querySelectorAll('.switcher-option');
+const currentAccountLabel = document.getElementById('current-account-label');
 
 // ==========================================
 // CLOCK LOGIC
@@ -49,16 +51,17 @@ updateClock();
 // ==========================================
 
 let heartbeatInterval;
+let ws;
 
 function connectLanyard() {
-    // If user hasn't set ID, just mock it visually
-    if (DISCORD_ID === "YOUR_DISCORD_ID_HERE") {
-        usernameEl.textContent = "Setup Required";
-        customStatusEl.textContent = "Enter Discord ID in script.js";
-        return;
+    if (ws) {
+        // Clean up previous connection if it exists
+        ws.onclose = null; // Prevent reconnect loop from firing during manual close
+        ws.close();
+        clearInterval(heartbeatInterval);
     }
 
-    const ws = new WebSocket('wss://api.lanyard.rest/socket');
+    ws = new WebSocket('wss://api.lanyard.rest/socket');
 
     ws.onopen = () => {
         console.log("Connected to Lanyard");
@@ -72,7 +75,7 @@ function connectLanyard() {
                 startHeartbeat(ws, data.d.heartbeat_interval);
                 ws.send(JSON.stringify({
                     op: 2,
-                    d: { subscribe_to_id: DISCORD_ID }
+                    d: { subscribe_to_id: currentDiscordId }
                 }));
                 break;
             case 0: // Event Payload
@@ -163,5 +166,44 @@ function updateDiscordUI(data) {
         activityCont.classList.add('hidden');
     }
 }
+
+// ==========================================
+// SWITCHER LOGIC
+// ==========================================
+switcherBtn.addEventListener('click', () => {
+    switcherMenu.classList.toggle('hidden');
+    switcherBtn.classList.toggle('open');
+});
+
+switcherOptions.forEach(option => {
+    option.addEventListener('click', (e) => {
+        // Update UI
+        switcherOptions.forEach(opt => opt.classList.remove('active'));
+        e.target.classList.add('active');
+        currentAccountLabel.textContent = e.target.textContent;
+        
+        // Close menu
+        switcherMenu.classList.add('hidden');
+        switcherBtn.classList.remove('open');
+        
+        // Reconnect lanyard
+        currentDiscordId = e.target.getAttribute('data-id');
+        
+        // Show loading state temporarily
+        usernameEl.textContent = "Loading...";
+        customStatusEl.textContent = "Connecting to Lanyard...";
+        activityCont.classList.add('hidden');
+        
+        connectLanyard();
+    });
+});
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!switcherBtn.contains(e.target) && !switcherMenu.contains(e.target)) {
+        switcherMenu.classList.add('hidden');
+        switcherBtn.classList.remove('open');
+    }
+});
 
 connectLanyard();

@@ -306,6 +306,87 @@ body {
     text-overflow: ellipsis;
 }
 
+/* Account Switcher */
+.account-switcher {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 10;
+}
+
+.switcher-btn {
+    appearance: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.switcher-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.switcher-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.switcher-btn.open svg {
+    transform: rotate(180deg);
+}
+
+.switcher-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: max-content;
+    min-width: 140px;
+    border-radius: 15px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: top right;
+}
+
+.switcher-menu.hidden {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+    pointer-events: none;
+}
+
+.switcher-option {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+}
+
+.switcher-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.switcher-option.active {
+    background: rgba(168, 85, 247, 0.2);
+    color: var(--accent);
+    font-weight: 600;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
     .container {
