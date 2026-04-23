@@ -1,0 +1,10 @@
+{
+    "manifest_version": 2,
+    "name": "Velocity Homepage",
+    "version": "1.0",
+    "description": "Custom new tab page with Discord Lanyard integration",
+    "chrome_url_overrides": {
+        "newtab": "index.html"
+    },
+    "permissions": []
+}
